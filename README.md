@@ -1,5 +1,5 @@
-# Novenykatalogus
-A projektet úgy készítettük el, hogy későbbiekben egy kisvállalat feltudja használni mivel rengeteg lehetőséget tartogat magában.
+# PlantCatalogue
+A projektet úgy készítettük el, hogy későbbiekben kezdetben egy kisebb vállalat, majd az idő előre haladtával egy nagyobb vállalat fentarthassa. Folyamotasn bővülő adatbázisa miatt igényel nagyobb tárhelyű szervereket.
 ## Szoftverek listája:
 Visual Studio Code:
 >+	Cypress
