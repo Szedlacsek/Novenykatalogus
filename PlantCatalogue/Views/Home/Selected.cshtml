@@ -1,0 +1,171 @@
+﻿@model ToolsPic
+<style>
+    * {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    body {
+        background: linear-gradient(to right, rgba(7, 207, 0, 1), rgba(17, 73, 194, 1)) !important;
+    }
+
+    .header {
+        text-align: center;
+        font-family: 'Rubik Wet Paint', cursive;
+        padding-left: 10vw;
+    }
+
+    .nav-color {
+        background-color: #559900 !important;
+    }
+
+    .pic-size {
+        max-width: 30%;
+        max-height: 45%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .search-move {
+        width: 10vw;
+        max-width: 150%;
+        min-width: 15%;
+        height: 40px;
+        padding-right: 5px;
+    }
+
+    .navbar-toggler {
+        margin-right: 30px;
+    }
+
+    .btn-warning:hover {
+        background-color: darkgoldenrod;
+    }
+
+    .btn-warning {
+        width: 10vw;
+        min-width: 100px;
+        height: 40px;
+    }
+
+    .card-deck {
+        border: solid 1px;
+    }
+
+    .comment-move {
+        padding-left: 30px;
+        padding-right: 30px;
+        text-align: center;
+    }
+
+    .comment-padding {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .bg-color {
+        background-color: white !important;
+    }
+    ::-webkit-scrollbar {
+        width: 3vh;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(17, 73, 194);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgb(132, 250, 110);
+        border-radius: 0.9vh;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(7, 207, 0);
+        }
+</style>
+<article>
+    <section>
+        @* Kereső felület *@
+        <nav class=" nav-color navbar-dark bg-dark head navbar navbar-expand-lg navbar-toggleable-md border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">
+                    <h2 class="header">Növény leírása</h2>
+                </a>
+            </div>
+            @* Lenyíló menü *@
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mob-navbar" aria-label="Toggle">
+                <span class="">
+                    <img src="~/box-arrow-left.svg" alt="Menu button" />
+                </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mob-navbar">
+                <ul class="navbar-nav mb-2 mb-lg-0 mx-auto">
+                </ul>
+
+                <form class="d-flex search-move justify-content-end" method="post">
+                    <input type="hidden" value=@Model.Id name="UserId" />
+                    <input type="submit" value="Vissza" class="btn-warning" asp-action="OutSearch">
+                </form>
+            </div>
+        </nav>
+    </section>
+
+    <section>
+
+        @* Egy-egy kártya a választott növény adataival *@
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-10">
+                    <div class="card-decks">
+                        <div class="card-group">
+
+                            @foreach (Tools item in Model.Tool)
+                            {
+                                <div class="card" style="width: 18rem;">
+                                    <img class="card-img-top pic-size" src="~/pictures/@Model.PlantName-.jpg" alt="~/pictures/@Model.PlantName-.jpg">
+                                    <div class="card-body">
+                                        <p class="card-text"><h3><b>Szükséges anyagok :</b> @item.ToolsName.Replace('_',' ')</h3> </p>
+                                        <p class="card-text"><h3><b>Szükséges eszközök :</b> @item.ToolsType.Replace('_',' ')</h3> </p>
+                                        <p class="card-text"><h3><b>Növény leírása :</b><br> @item.ToolsDesc.Replace('_',' ')</h3> </p>
+                                    </div>
+                                </div>
+                            }
+                            <div class="bg-color">
+                                <h3>
+                                    Hasznosnak véli a leírást?
+                                    Kérdéseire választ kapott? Írja le kommentbe tapasztalatait ezzel támogatva a fejlesztők munkáját!
+                                </h3>
+                                <br>
+                                <div class="row comment-padding">
+                                    <form method="post" class="comment-move">
+                                        <input name="Id" type="hidden" value=@Model.Id />
+                                        <input name="PlantId" type="hidden" value=@Model.PlantId />
+                                        <input name="PlantName" type="hidden" value=@Model.PlantName />
+
+                                        <input name="Comm" type="text" style="width:30%" />
+                                        <input type="submit" asp-action="CommentCreate2" value="Küld">
+                                        <br>
+                                        <br>
+                                    </form>
+                                    <br>
+                                    <br>
+                                    @if (@Model.Emails != null && @Model.Comments.Count() > 0)
+                                    {
+                                        @for (int i = 0; i < Model.Emails.Count(); i++)
+                                        {
+                                            <h3 style="text-decoration-line:underline">@Model.Emails.ToList()[i] : </h3>
+                                            <p>
+                                                <h4>@Model.Comments.ToList()[i]</h4>
+                                            </p>
+                                            <hr>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</article>

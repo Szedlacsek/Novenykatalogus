@@ -1,0 +1,160 @@
+﻿@using PlantCatalogue.ViewModels
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Registration and Login";
+}
+@model Reglogin
+<style>
+    body {
+        background: linear-gradient(to right, rgba(7, 207, 0, 1), rgba(17, 73, 194, 1)) !important;
+    }
+
+
+    .gradient-custom-3 {
+        background: linear-gradient(to right, rgba(7, 207, 0, 0.5), rgba(17, 73, 194, 0.5));
+    }
+
+    .gradient-custom-4 {
+        background: linear-gradient(to right, rgba(132, 250, 110, 1), rgba(143, 211, 244, 1));
+    }
+
+        .gradient-custom-4:hover {
+            background: linear-gradient(to right, rgba(7, 207, 0, 1), rgba(17, 73, 194, 1));
+        }
+
+    .nav-color {
+        background-color: #559900 !important;
+    }
+
+    .search-move {
+        width: 10vw;
+        max-width: 150%;
+        min-width: 15%;
+        height: 40px;
+        padding-right: 5px;
+    }
+
+    .btn-warning {
+        margin-right: 15px;
+        width: 5vw;
+        min-width: 120px;
+    }
+
+        .btn-warning:hover {
+            background-color: darkgoldenrod;
+        }
+
+    .warning-up {
+        text-align: center;
+    }
+
+    .header {
+        font-family: 'Rubik Wet Paint', cursive;
+        text-align: center !important;
+        padding-left: 10vw;
+    }
+
+    .bg-fix {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: rgba(7, 207, 0, 0.5), rgba(17, 73, 194, 0.5);
+    }
+
+    ::-webkit-scrollbar {
+        width: 3vh;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(17, 73, 194);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgb(132, 250, 110);
+        border-radius: 0.9vh;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(7, 207, 0);
+        }
+</style>
+<article>
+    <section>
+        @* Kereső felület *@
+        <nav class=" nav-color navbar-dark bg-dark head navbar navbar-expand-lg navbar-toggleable-md border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">
+                    <h2 class="header">Növénykatalógus</h2>
+                </a>
+
+                @* Lenyíló menü *@
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mob-navbar" aria-label="Toggle">
+                    <span>
+                        <img src="~/box-arrow-in-right.svg" alt="Menu button" />
+                    </span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="mob-navbar">
+                <ul class="navbar-nav mb-2 mb-lg-0 mx-auto">
+                </ul>
+                @* Bejelentkezés *@
+                <form class="d-flex justify-content-end" method="post">
+
+                    <input class="form-control me-2 search-move" type="email" name="Email" placeholder="Email-cím">
+                    <input class="form-control me-2 search-move" type="password" name="Password" placeholder="Jelszó">
+
+                    <div class="d-flex">
+                        <input type="submit" value="Bejelentkezés" class="btn-warning" asp-action="Login">
+                        <input asp-action="Forgott" type="submit" class="btn-warning" value="Elfelejtett jelszó">
+                    </div>
+                </form>
+            </div>
+        </nav>
+    </section>
+</article>
+@* Regisztrációs form *@
+<article>
+    <section class="vh-100 bg-image bg-fix" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Hozzon létre egy felhasználói fiókot</h2>
+                                @if (Model.error != "")
+                                {
+                                    <p>@Model.error</p>
+                                }
+                                <form method="post">
+                                    @* E-Mail *@
+                                    <div class="form-outline mb-4">
+                                        <input name="Email" type="email" id="form3Example3cg" class="form-control form-control-lg" required placeholder="Kérem, adja meg az E-mail címét." />
+                                        <label class="form-label" for="form3Example3cg">Az E-Mail címed</label>
+                                    </div>
+                                    @* Jelszó *@
+                                    <div class="form-outline mb-4">
+                                        <input name="Password" type="password" id="form3Example4cg" class="form-control form-control-lg" required placeholder="Kérem, adja meg a jelszavát amit használni szeretne." />
+                                        <label class="form-label" for="form3Example4cg">Jelszó</label>
+                                    </div>
+                                    @* Jelszó újra *@
+                                    <div class="form-outline mb-4">
+                                        <input name="ConfirmPassword" type="password" id="form3Example4cdg" class="form-control form-control-lg" required placeholder="Kérem, adja meg a jelszavát újra." />
+                                        <label class="form-label" for="form3Example4cdg">Jelszó újra</label>
+                                    </div>
+                                    <p class="warning-up"><b>Jelszavát az Ön biztonsága érdekében, kérem, ne adja tovább!</b></p>
+                                    @* Regisztrálás*@
+                                    <div class="d-flex justify-content-center">
+                                        <input asp-action="Register" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" value="Regisztráció">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</article>

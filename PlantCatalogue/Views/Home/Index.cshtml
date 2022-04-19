@@ -1,0 +1,144 @@
+﻿@model PlantCatalogue.ViewModels.IndexSearch
+@{
+    ViewData["Title"] = "Plant Catalogue";
+    var modelid = ViewBag.Search as PlantCatalogue.ViewModels.IndexSearch;
+}
+<style>
+    * {
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    body {
+        background: linear-gradient(to right, rgba(7, 207, 0, 1), rgba(17, 73, 194, 1)) !important;
+    }
+
+
+    .header {
+        text-align: center;
+        font-family: 'Rubik Wet Paint', cursive;
+        padding-left: 10vw;
+    }
+
+    .nav-color {
+        background-color: #559900 !important;
+    }
+
+    .card {
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 80%;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .search-move {
+        max-width: 150%;
+        min-width: 15%;
+        height: 40px;
+        padding-right: 5px;
+    }
+
+    .btn-warning:hover {
+        background-color: darkgoldenrod;
+    }
+
+    .btn-warning {
+        margin-right: 20px;
+        width: 10vw;
+        min-width: 120px;
+    }
+
+    .align-center {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        max-height: 100%;
+    }
+    ::-webkit-scrollbar {
+        width: 3vh;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(17, 73, 194);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgb(132, 250, 110);
+        border-radius: 0.9vh;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(7, 207, 0);
+        }
+</style>
+<article>
+    <section>
+        @* Kereső felület *@
+        <nav class=" nav-color navbar-dark bg-dark head navbar navbar-expand-lg navbar-toggleable-md border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">
+                    <h2 class="header">Növénykatalógus</h2>
+                </a>
+            </div>
+            @* Lenyíló menü *@
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mob-navbar" aria-label="Toggle">
+                <span>
+                    <img src="~/box-arrow-in-right.svg" alt="Menu button" />
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="mob-navbar">
+                <ul class="navbar-nav mb-2 mb-lg-0 mx-auto">
+                </ul>
+
+                <form class="d-flex search-move justify-content-end" method="post">
+                    <input class="form-control me-2" style="width: 100px" type="text" name="Search" placeholder="Kereső" value=@Model.Search>
+                    <input type="hidden" name="UserId" value=@Model.UserId>
+                    <input type="submit" value="Keresés" class="btn-warning" asp-action="OutSearch">
+                </form>
+            </div>
+        </nav>
+    </section>
+    @if (Model.error != "" && Model.error != null)
+    {
+        <p>@Model.error</p>
+    }
+    <section>
+        @* Kártyák a növények neveivel *@
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-12 col-sm-8">
+                    <div class="card-decks">
+                        <div class="card-group align-center">
+                            @foreach (Plants item in Model.plent)
+                            {
+                                @if (item.Available)
+                                {
+                                    <form method="post" class="form-size">
+                                        <div class="card" style="width: 18rem;">
+                                            <input type="hidden" name="PlantId" value=@item.PlantId>
+                                            <input type="hidden" name="UserId" value=@Model.UserId>
+                                            <input type="hidden" name="PlantName" value=@item.PlantName>
+                                            <button type="submit" asp-action="Selected2" class="button" display="inline-block" style="height: 100%;">
+                                                <img class="card-img-top" src="~/pictures/@item.PlantName-.jpg" alt="@item.PlantName" style="height: 80%">
+
+                                                <div class="card-body">
+                                                    <p class="card-text">@item.PlantName.Replace('_',' ')</p>
+                                                    <p class="card-text">@item.LatinName.Replace('_',' ')</p>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </form>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+
+
+

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PlantCatalogue</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PlantCatalogue.styles.css" asp-append-version="true" />
+    <link rel="icon" src="~/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
+</head>
+
+<style>
+    .privacy{
+        color:white !important;
+        text-decoration-line:none !important;
+    }
+    .priv-skin{
+        color: white;
+        text-decoration-line:underline;
+    }
+    .priv-skin:hover{
+        color:yellow !important;
+        text-decoration-line:underline;
+    }
+    .email-tag{
+        color:white;
+        text-decoration-line:underline;
+    }
+    .email-tag:hover{
+        color:yellow !important;
+        text-decoration-line:underline;
+    }
+</style>
+<body>
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <br>
+    <br>
+    <br>
+    <footer class="border-top footer text-muted">
+        <div class="container privacy">
+            <h4>&copy; 2022 - PlantCatalogue - <a class="priv-skin" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></h4>
+            <p><h4>Kérdése van? Ötletet szeretne megosztani? Küldjön <a href = "mailto: szedlacsek.szintia@gmail.com"><b class="email-tag">E-mailt</b></a> a fejlesztőnek!</h4></p>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

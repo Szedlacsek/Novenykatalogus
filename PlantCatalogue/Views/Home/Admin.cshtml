@@ -1,0 +1,672 @@
+﻿@model AdminPage
+@{
+    ViewData["Title"] = "Admin";
+}
+<style>
+    .insertdata {
+        border: solid 2px darkgreen;
+        border-collapse: collapse;
+    }
+
+        .insertdata th {
+            padding-left: 20px;
+            padding-right: 20px;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .insertdata td {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .insertdata tr:hover {
+            background-color: #00CC00;
+        }
+
+    .checkbox-center {
+        margin: auto;
+        text-align: center;
+        display: flex;
+    }
+
+    h1 {
+        text-align: center;
+        font-family: cursive;
+        font-size: large;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    .nav-color {
+        background-color: #559900 !important;
+    }
+
+    .btn-warning:hover {
+        background-color: darkgoldenrod;
+    }
+
+    .btn-warning {
+        width: 10vw;
+        min-width: 100px;
+        height: 40px;
+    }
+
+    .table-display {
+        display: table;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+    }
+
+    .search-move {
+        width: 10vw;
+        max-width: 150%;
+        min-width: 15%;
+        height: 40px;
+        padding-right: 50px;
+    }
+
+    .font-skin {
+        font-family: 'Rubik Wet Paint', cursive;
+        font-size: xx-large !important;
+    }
+
+    .header {
+        text-align: center;
+        font-family: 'Rubik Wet Paint', cursive;
+        padding-left: 10vw;
+    }
+    ::-webkit-scrollbar {
+        width: 3vh;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(17, 73, 194);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgb(132, 250, 110);
+        border-radius: 0.9vh;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(7, 207, 0);
+        }
+</style>
+<article class="row">
+    <section>
+        @* Az Inedx oldalra visszalépő felület *@
+        <nav class=" nav-color navbar-dark bg-dark head navbar navbar-expand-lg navbar-toggleable-md border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">
+                    <h2 class="header font-skin">Adatbázis kezelése</h2>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mob-navbar" aria-label="Toggle">
+                <span class="">
+                    @* Lenyíló menü *@
+                    <img src="~/box-arrow-left.svg" alt="Menu button" class="pic" />
+                </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mob-navbar">
+                <ul class="navbar-nav mb-2 mb-lg-0 mx-auto">
+                </ul>
+
+                <form class="d-flex search-move justify-content-end" method="post">
+                    <input type="submit" value="Vissza" class="btn-warning" asp-action="Index">
+                </form>
+            </div>
+        </nav>
+    </section>
+</article>
+<article class="row table-display">
+    <br>
+    <section>
+        @if (Model.error != "" && Model.error != null)
+        {
+            <p>@Model.error</p>
+        }
+        @* Növények és képek felvitele az adatbázisba *@
+        <h1>Adatbázisba növévények adatainak beírása : </h1>
+        <div class="container-fluid insertdata">
+            <div class="row ">
+                <table>
+                    <form method="post" asp-action="PlantPage" enctype="multipart/form-data">
+
+                    <tr>
+                        <th>
+                            PlantName
+                        </th>
+                        <th>
+                            LatinName
+                        </th>
+                        <th>
+                            Available
+                        </th>
+
+                        <th>
+                            Picture
+                        </th>
+
+                        <th>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="PlantName" type="text" />
+                        </td>
+                        <td>
+                            <input name="LatinName" type="text" />
+                        </td>
+                        <td>
+
+                            <input name="Available" type="checkbox" class="checkbox-center" onclick="this.value = this.checked" />
+                        </td>
+                        <td>
+                            <input name="Picture" type="file" accept="image/jpeg" margin="auto" align="center" />
+                        </td>
+
+                        <td class="sendlink">
+                            <input type="submit" value="Create">
+                        </td>
+                        <th>
+                        </th>
+                    </tr>
+
+                    </form>
+                </table>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <h1>Adatbázisban lévő növények adatainak törlése, felülírása :</h1>
+        @if (Model.plants.Count() > 0)
+        {
+            <div class="container-fluid insertdata">
+                <div class="row">
+                    <table>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                PlantName
+                            </th>
+                            <th>
+                                LatinName
+                            </th>
+                            <th>
+                                Available
+                            </th>
+                            <th>
+                                Picture
+                            </th>
+
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+
+                        @foreach (Plants item in Model.plants)
+                        {
+                            <form method="post">
+                            <tr>
+                                <td>
+                                    <input name="PlantId" type="hidden" value=@item.PlantId>
+                                    <p>@item.PlantId</p>
+                                </td>
+
+                                <td>
+                                    <input name="PlantName" type="text" value=@item.PlantName>
+                                </td>
+
+                                <td>
+                                    <input name="LatinName" type="text" value=@item.LatinName>
+                                </td>
+
+                                <td>
+                                    <input name="Available" type="checkbox" class="checkbox-center" checked=@item.Available value=@item.Available onclick="this.value = this.checked">
+                                </td>
+
+                                <td align="center" ;>
+                                    <img src="~/pictures/@item.PlantName-.jpg" width="20%" height="20%" ;>
+                                </td>
+
+                                <td class="sendlink">
+                                    <input type="submit" value="Delete" asp-action="DeletePlants">
+                                </td>
+                                <td class="sendlink">
+                                    <input type="submit" value="Update" asp-action="PlantUpdate">
+                                </td>
+                            </tr>
+                            </form>
+                        }
+                    </table>
+                </div>
+            </div>
+
+        }
+    </section>
+    <br>
+    <br>
+    <section>
+        <h1>Növényekhez használt eszközök : </h1>
+        <div class="container-fluid insertdata">
+            <div class="row ">
+                <div>
+                    <table>
+                        <form method="post" asp-action="ToolsCreate" enctype="multipart/form-data">
+
+                        <tr>
+                            <th>
+                                ToolsName
+                            </th>
+                            <th>
+                                ToolsType
+                            </th>
+                            <th>
+                                ToolsDesc
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input name="ToolsName" type="text" />
+                            </td>
+                            <td>
+                                <input name="ToolsType" type="text" />
+                            </td>
+                            <td>
+                                <input name="ToolsDesc" type="text" />
+                            </td>
+                            <td class="sendlink">
+                                <input type="submit" value="ToolsCreate">
+                            </td>
+                        </tr>
+
+                        </form>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <h1>Adatbázisban lévő eszközök adatainak törtlése, felülírása :</h1>
+        @if (Model.tools.Count() > 0)
+        {
+            <div class="container-fluid insertdata">
+                <div class="row">
+
+                    <table>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                ToolsName
+                            </th>
+                            <th>
+                                ToolsType
+                            </th>
+                            <th>
+                                ToolsDesc
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        @foreach (Tools item in Model.tools)
+                        {
+                            <form method="post">
+                            <tr>
+                                <td>
+                                    <input name="ToolsId" type="hidden" value=@item.ToolsId>
+                                    <p>@item.ToolsId</p>
+                                </td>
+                                <td>
+                                    <input name="ToolsName" type="text" value=@item.ToolsName>
+                                </td>
+                                <td>
+                                    <input name="ToolsType" type="text" value=@item.ToolsType>
+                                </td>
+                                <td>
+                                    <input name="ToolsDesc" type="text" value=@item.ToolsDesc>
+                                </td>
+
+                                <td class="sendlink">
+                                    <input type="submit" value="Delete" asp-action="ToolsDelete">
+                                </td>
+                                <td class="sendlink">
+                                    <input type="submit" value="Update" asp-action="ToolsUpdate">
+                                </td>
+                            </tr>
+                            </form>
+                        }
+                    </table>
+                </div>
+            </div>
+        }
+    </section>
+    <br>
+    <br>
+    <section>
+        <h1>Adatbázisban lévő adatok összekapcsolása :</h1>
+        <div class="container-fluid insertdata">
+            <div class="row">
+                <table>
+                    <form method="post" asp-action="SwitchCreate">
+
+                    <tr>
+                        <th>
+                            PlantsId
+                        </th>
+                        <th>
+                            ToolsId
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="PlantsId" type="number" />
+                        </td>
+                        <td>
+                            <input name="ToolsId" type="number" />
+                        </td>
+                        <td class="sendlink">
+                            <input type="submit" value="SwitchCreate">
+                        </td>
+                    </tr>
+
+                    </form>
+                </table>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <h1>Kapcsolások módosítása, törlése :</h1>
+        <div class="container-fluid insertdata">
+            <div class="row">
+                @if (Model.switchi.Count() > 0)
+                {
+                    <div class="main">
+                        <table>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <th>
+                                    PlantsId
+                                </th>
+                                <th>
+                                    ToolsId
+                                </th>
+                                <th>
+
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                            @foreach (Switch item in Model.switchi)
+                            {
+                                <form method="post">
+                                <tr>
+                                    <td>
+                                        <input name="SwitchId" type="hidden" value=@item.SwitchId>
+                                        <p>@item.SwitchId</p>
+                                    </td>
+                                    <td>
+                                        <input name="PlantsId" type="text" value=@item.PlantsId>
+                                    </td>
+                                    <td>
+                                        <input name="ToolsId" type="text" value=@item.ToolsId>
+                                    </td>
+
+                                    <td class="sendlink">
+                                        <input type="submit" value="Delete" asp-action="SwitchDelete">
+                                    </td>
+                                    <td class="sendlink">
+                                        <input type="submit" value="Update" asp-action="SwitchUpdate">
+                                    </td>
+                                </tr>
+                                </form>
+                            }
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+    <br />
+    <br>
+    <section>
+        @* Felhasználók felvitele az adatbázisba *@
+        <h1>Adatbázisba felhasználók adatainak beírása : </h1>
+        <div class="container-fluid insertdata">
+            <div class="row ">
+                <table>
+                    <form method="post" asp-action="UserCreate" enctype="multipart/form-data">
+
+                    <tr>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Password
+                        </th>
+                        <th>
+                            Validate
+                        </th>
+
+                        <th>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="Email" type="text" />
+                        </td>
+                        <td>
+                            <input name="Password" type="text" />
+                        </td>
+                        <td>
+                            <input name="Valid" type="checkbox" class="checkbox-center" onclick="this.value = this.checked" />
+                        </td>
+
+                        <td class="sendlink">
+                            <input type="submit" value="Create">
+                        </td>
+                        <th>
+                        </th>
+                    </tr>
+
+                    </form>
+                </table>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <h1>Adatbázisban lévő felhasználók adatainak törlése, felülírása :</h1>
+        @if (Model.users.Count() > 0)
+        {
+            <div class="container-fluid insertdata">
+                <div class="row">
+                    <table>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Valid
+                            </th>
+
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+
+                        @foreach (User item in Model.users)
+                        {
+                            <form method="post">
+                            <tr>
+                                <td>
+                                    <input name="Id" type="hidden" value=@item.Id>
+                                    <input name="Password" type="hidden" value=@item.Password>
+                                    <p>@item.Id</p>
+                                </td>
+
+                                <td>
+                                    <input name="Email" type="text" value=@item.Email>
+                                </td>
+
+                                <td>
+                                    <input name="Valid" type="checkbox" checked=@item.Valid class="checkbox-center" onclick="this.value = this.checked" />
+                                </td>
+
+                                <td class="sendlink">
+                                    <input type="submit" value="Delete" asp-action="DeleteUser">
+                                </td>
+                                <td class="sendlink">
+                                    <input type="submit" value="Update" asp-action="UserUpdate">
+                                </td>
+                            </tr>
+                            </form>
+                        }
+                    </table>
+                </div>
+            </div>
+
+        }
+    </section>
+    <br>
+    <br>
+    <section>
+        @* Comment felvitele az adatbázisba *@
+        <h1>Adatbázisba kommentek adatainak beírása : </h1>
+        <div class="container-fluid insertdata">
+            <div class="row ">
+                <table>
+                    <form method="post" asp-action="CommentCreate" enctype="multipart/form-data">
+
+                    <tr>
+                        <th>
+                            UserId
+                        </th>
+                        <th>
+                            PlantId
+                        </th>
+                        <th>
+                            Comm
+                        </th>
+
+                        <th>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input name="UserId" type="number" />
+                        </td>
+                        <td>
+                            <input name="PlantId" type="number" />
+                        </td>
+                        <td>
+                            <input name="Comm" type="text" />
+                        </td>
+
+                        <td class="sendlink">
+                            <input type="submit" value="Create">
+                        </td>
+                        <th>
+                        </th>
+                    </tr>
+
+                    </form>
+                </table>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <h1>Adatbázisban lévő commentek adatainak törlése, felülírása :</h1>
+        @if (Model.users.Count() > 0)
+        {
+            <div class="container-fluid insertdata">
+                <div class="row">
+                    <table>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                UserId
+                            </th>
+                            <th>
+                                PlantId
+                            </th>
+                            <th>
+                                Comm
+                            </th>
+
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+
+                        @foreach (Comment item in Model.comments)
+                        {
+                            <form method="post">
+                            <tr>
+                                <td>
+                                    <input name="Id" type="hidden" value=@item.Id>
+                                    <p>@item.Id</p>
+                                </td>
+
+                                <td>
+                                    <input name="UserId" type="number" value=@item.UserId>
+                                </td>
+
+                                <td>
+                                    <input name="PlantId" type="number" value=@item.PlantId>
+                                </td>
+
+                                <td>
+                                    <input name="Comm" type="text" value=@item.Comm>
+                                </td>
+
+                                <td class="sendlink">
+                                    <input type="submit" value="Delete" asp-action="DeleteComment">
+                                </td>
+                                <td class="sendlink">
+                                    <input type="submit" value="Update" asp-action="CommentUpdate">
+                                </td>
+                            </tr>
+                            </form>
+                        }
+                    </table>
+                </div>
+            </div>
+        }
+    </section>
+    <br>
+</article>
